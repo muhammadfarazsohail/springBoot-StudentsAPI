@@ -1,7 +1,7 @@
 package com.students.students.services;
 
 import com.students.students.entities.Student;
-import com.students.students.repositories.StudentRepository;
+import com.students.students.repositories.IStudentRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,11 +13,11 @@ import java.util.Optional;
 @Transactional
 public class StudentService implements IService<Student>{
 
-    private final StudentRepository _studentRepository;
+    private final IStudentRepository _I_studentRepository;
 
     @Autowired
-    public StudentService(StudentRepository studentRepository) {
-        _studentRepository = studentRepository;
+    public StudentService(IStudentRepository IStudentRepository) {
+        _I_studentRepository = IStudentRepository;
     }
 
     @Override
@@ -28,12 +28,12 @@ public class StudentService implements IService<Student>{
     @Override
     public List<Student> retrieveAll() {
 
-        return _studentRepository.findAll();
+        return _I_studentRepository.findAll();
     }
 
     @Override
     public Student retrieveById(Long id) throws Exception {
-        Optional<Student> checkStudent= _studentRepository.findById(id);
+        Optional<Student> checkStudent= _I_studentRepository.findById(id);
         if(checkStudent.isPresent()){
             return checkStudent.get();
         }
@@ -44,13 +44,13 @@ public class StudentService implements IService<Student>{
 
     @Override
     public Student insert(Student obj) {
-        return _studentRepository.save(obj);
+        return _I_studentRepository.save(obj);
     }
 
     @Override
     public Student update(Student obj) throws Exception {
 
-        Optional<Student> checkStudent= _studentRepository.findById(obj.getId());
+        Optional<Student> checkStudent= _I_studentRepository.findById(obj.getId());
         if(checkStudent.isPresent()){
             Student studentUpdate= checkStudent.get();
             studentUpdate.setId(obj.getId());
@@ -59,7 +59,7 @@ public class StudentService implements IService<Student>{
             studentUpdate.setFirstName(obj.getFirstName());
             studentUpdate.setLastName(obj.getLastName());
             studentUpdate.setClassName(obj.getClassName());
-            _studentRepository.save(studentUpdate);
+            _I_studentRepository.save(studentUpdate);
             return studentUpdate;
         }
         else{
@@ -70,9 +70,9 @@ public class StudentService implements IService<Student>{
     @Override
     public void delete(Long id) throws Exception {
 
-        Optional<Student> checkStudent= _studentRepository.findById(id);
+        Optional<Student> checkStudent= _I_studentRepository.findById(id);
         if(checkStudent.isPresent()){
-            _studentRepository.delete(checkStudent.get());
+            _I_studentRepository.delete(checkStudent.get());
         }
         else{
             throw new Exception("Resource not found by id:"+id);
